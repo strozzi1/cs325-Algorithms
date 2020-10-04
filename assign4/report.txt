@@ -1,0 +1,130 @@
+CS 325-001, Algorithms, Fall 2019
+HW4 - Priority Queue and Heaps
+
+Due via the submit program on Monday Oct 21, 11:59pm.
+No late submission will be accepted.
+
+Need to submit: report.txt, nbest.py, kmergesort.py, datastream.py.
+datastream.py will be graded for correctness (1%).
+
+To submit:
+flip $ /nfs/farm/classes/eecs/fall2019/cs325-001/submit hw4 report.txt {nbest,kmergesort,datastream}.py
+(You can submit each file separately, or submit them together.)
+
+To see your best results so far:
+flip $ /nfs/farm/classes/eecs/fall2019/cs325-001/query hw4
+
+
+Textbooks for References:
+[1] CLRS Ch. 6
+[2] KT slides for binary heaps (only read the first 20 pages!): 
+    https://www.cs.princeton.edu/~wayne/kleinberg-tardos/pdf/BinomialHeaps.pdf
+[3] Python heapq module 
+
+0. There are two methods for building a heap from an unsorted array:
+   (1) insert each element into the heap  --- O(nlogn) -- heapq.heappush()
+   (2) heapify (top-down)                 --- O(n)     -- heapq.heapify()
+
+   (a) Derive these time complexities.
+   (b) Use a long list of random numbers to show the difference in time. (Hint: random.shuffle or random.sample)
+   (c) What about sorted or reversely-sorted numbers?
+
+1. Given two lists A and B, each with n integers, return
+   a sorted list C that contains the smallest n elements from AxB:
+
+     AxB = { (x, y) | x in A, y in B }
+
+   i.e., AxB is the Cartesian Product of A and B.
+
+   ordering:  (x,y) < (x',y') iff. x+y < x'+y' or (x+y==x'+y' and y<y')
+
+   You need to implement three algorithms and compare:
+
+   (a) enumerate all n^2 pairs, sort, and take top n.
+   (b) enumerate all n^2 pairs, but use qselect from hw1.
+   (c) Dijkstra-style best-first, only enumerate O(n) (at most 2n) pairs.
+       Hint: you can use Python's heapq module for priority queue.
+
+   Q: What are the time complexities of these algorithms? 
+    slowest - n^2logn
+    slow - n^2
+    fast - logn
+   >>> a, b = [4, 1, 5, 3], [2, 6, 3, 4]
+   >>> nbesta(a, b)   # algorithm (a), slowest
+   [(1, 2), (1, 3), (3, 2), (1, 4)]
+   >>> nbestb(a, b)   # algorithm (b), slow
+   [(1, 2), (1, 3), (3, 2), (1, 4)]
+   >>> nbestc(a, b)   # algorithm (c), fast
+   [(1, 2), (1, 3), (3, 2), (1, 4)]
+
+   Filename: nbest.py
+
+2. k-way mergesort (the classical mergesort is a special case where k=2).
+
+   >>> kmergesort([4,1,5,2,6,3,7,0], 3)  # k=3
+   [0,1,2,3,4,5,6,7]
+
+   Q: What is the complexity? Write down the detailed analysis in report.txt.
+    I don't know. I thought the teacher mentioned during class that we are given k sorted lists and we need to merge them. I took that literally and 2-way 
+    sorted each list before merging all k lists into one, and didn't realize I was wrong about what he meant by that until it was too late.
+
+
+   Filename: kmergesort.py
+
+3. [WILL BE GRADED]
+   
+   Find the k smallest numbers in a data stream of length n (k<<n),
+   using only O(k) space (the stream itself might be too big to fit in memory).
+
+   >>> ksmallest(4, [10, 2, 9, 3, 7, 8, 11, 5, 7])
+   [2, 3, 5, 7]
+   >>> ksmallest(3, range(1000000, 0, -1))
+   [1, 2, 3]
+
+   Note: 
+   a) it should work with both lists and lazy lists
+   b) the output list should be sorted
+
+   Q: What is your complexity? Write down the detailed analysis in report.txt.
+    
+   
+   Filename: datastream.py
+
+   [UPDATE] The built-in function heapq.nsmallest() is _not_ allowed for this problem.
+   	    The whole point is to implement it yourself. :)
+
+
+4. (optional) Summarize the time complexities of the basic operations (push, pop-min, peak, heapify) for these implementations of priority queue:
+   
+   (a) unsorted array
+   (b) sorted array (highest priority first)
+   (c) reversly sorted array (lowest priority first)
+   (d) linked list
+   (e) binary heap
+
+Debriefing (required!): --------------------------
+
+0. What's your name?
+  Joshua Strozzi
+1. Approximately how many hours did you spend on this assignment?
+  8 hours
+2. Would you rate it as easy, moderate, or difficult?
+  Difficult
+3. Did you work on it mostly alone, or mostly with other people?
+   Note you are encouraged to discuss with your classmates, 
+   but each students should submit his/her own code.
+  I did not get the chance to work with anyone
+4. How deeply do you feel you understand the material it covers (0%-100%)? 
+  I do not understand most of it. maybe 40% is grasped
+5. Which part(s) of the course you like the most so far?
+  I like the eureka moments, however few and far between
+6. Which part(s) of the course you dislike the most so far?
+  I dislike the assignment descriptions the most. Not enough information is provided about what it is you're wanting us to do for each
+  solution. We our left to sift through hours of videos to hopefully find something that lends some idea to what you had in mind, and even then we may get it wrong
+  Sure, some people get it completely right, but the job of an instructor is to ensure we all learn, even those of us that think the least like you do.
+  Perhaps give greater instructions in the hw descriptions. 
+
+This section is intended to help us calibrate the homework assignments. 
+Your answers to this section will *not* affect your grade; however, skipping it
+will certainly do.
+

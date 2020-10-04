@@ -1,0 +1,114 @@
+CS 325-001, Analysis of Algorithms, Fall 2019
+HW1 - Python 3, qsort, BST, and qselect
+Due electronically on flip on Monday 9/30 at 11:59pm. 
+
+
+0. Q: What's the best-case, worst-case, and average-case time complexities of quicksort.
+   Briefly explain each case.
+  Best-case time-complexity is O(n log(n)), and would be when the list is balanced in their partitions, meaning you choose a good pivot and high and low numbers are evenly spread out throughout the list like 41532 
+  
+  Worst-case is O(n^2) and is when the list is already in order, even in reverse order and a bad pivot is chosen
+
+  Average case is O(n log(n)) and is just entirely random disbribution throughout the list and a random pivot is chosen
+
+
+1. [WILL BE GRADED] 
+   Quickselect with Randomized Pivot (CLRS Ch. 9.2).
+
+   >>> from qselect import *
+   >>> qselect(2, [3, 10, 4, 7, 19])
+   4
+   >>> qselect(4, [11, 2, 8, 3])
+   11
+
+   Q: What's the best-case, worst-case, and average-case time complexities? Briefly explain.
+    Best Case: 0(n) with the same list setup as quick sort's best case
+
+    Worst Case: 0(n^2) with the same list setup as quick sorts worst case and a bad pivot being chosen
+
+    Average Case: 0(n) completely random list and a random pivot.
+
+
+   Filename: qselect.py
+
+
+2. Buggy Qsort Revisited
+
+   In the slides we showed a buggy version of qsort which is weird in an interesting way:
+   it actually returns a binary search tree for the given array, rooted at the pivot:
+
+   >>> from qsort import *
+   >>> tree = sort([4,2,6,3,5,7,1,9])
+   >>> tree
+   [[[[], 1, []], 2, [[], 3, []]], 4, [[[], 5, []], 6, [[], 7, [[], 9, []]]]]
+
+   which encodes a binary search tree:
+
+                      4
+                    /   \
+                  2       6
+                 / \     / \
+                1   3   5   7
+                             \
+                              9
+   
+   Now on top of that piece of code, add three functions: 
+   * sorted(t): returns the sorted order (infix traversal)
+   * search(t, x): returns whether x is in t
+   * insert(t, x): inserts x into t (in-place) if it is missing, otherwise does nothing.
+
+   >>> sorted(tree)
+   [1, 2, 3, 4, 5, 6, 7, 9]
+   >>> search(tree, 6)
+   True
+   >>> search(tree, 6.5)
+   False
+   >>> insert(tree, 6.5)
+   >>> tree
+   [[[[], 1, []], 2, [[], 3, []]], 4, [[[], 5, []], 6, [[[], 6.5, []], 7, [[], 9, []]]]]
+   >>> insert(tree, 3)
+   >>> tree
+   [[[[], 1, []], 2, [[], 3, []]], 4, [[[], 5, []], 6, [[[], 6.5, []], 7, [[], 9, []]]]]
+
+   Hint: both search and insert should depend on a helper function _search(tree, x) which 
+   returns the subtree (a list) rooted at x when x is found, or the [] where x should 
+   be inserted.
+
+   e.g., 
+   >>> tree = sort([4,2,6,3,5,7,1,9])        # starting from the initial tree
+   >>> _search(tree, 3)
+   [[], 3, []]
+   >>> _search(tree, 0)
+   []
+   >>> _search(tree, 6.5)
+   []
+   >>> _search(tree, 0) is _search(tree, 6.5)
+   False
+   >>> _search(tree, 0) == _search(tree, 6.5)
+   True
+   
+   Note the last two []'s are different nodes (with different memory addresses): 
+   the first one is the left child of 1, while the second one is the left child of 7
+   (so that insert is very easy).
+   
+   Filename: qsort.py
+   
+   Q: What are the time complexities for the operations implemented?
+    _sort = It's the same as regular sort
+    _search = O(1)
+    _insert = O(h) where h=height
+
+Debriefing (required!): --------------------------
+
+1. Approximately how many hours did you spend on this assignment?
+  Answer 1: 5 hours
+2. Would you rate it as easy, moderate, or difficult?
+  Answer 2: easy to moderate
+3. Did you work on it mostly alone, or mostly with other people?
+  Answer 3: I worked entirely alone
+4. How deeply do you feel you understand the material it covers (0%–100%)? 
+  Answer 4: I don't entirely understand complexities yet. 
+5. Any other comments?
+  Answer 5: I'm not entirely sure about what I'm being asked to do at some points in this assignment. Instructions could be more clear. Maybe a different format than this. Maybe ask other teachers with successful formats if you need help with this.
+
+
